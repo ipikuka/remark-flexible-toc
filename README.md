@@ -231,7 +231,7 @@ Now, all TOC items' `href`s will start with that prefix like `#text-prefix-the-s
 
 #### `callback`
 
-It is a **callback function** `callback?: (toc: TocItem[]) => undefined;` which takes the TOC items as an argument and returns nothing. It is usefull for logging the TOC, forexample, or modifing the TOC. **It is allowed that the callback function is able mutate the TOC items !.**
+It is a **callback function** `callback?: (toc: TocItem[]) => undefined;` which takes the TOC items as an argument and returns nothing. It is usefull for logging the TOC, forexample, or modifing the TOC. **It is allowed that the callback function is able to mutate the TOC items !**
 
 The option has no default value.
 
@@ -243,7 +243,7 @@ use(remarkFlexibleToc, {
 });
 ```
 
-Now, each time when you compile the source, the TOC will be logged into console for debugging purpose.
+Now, each time when you compile the source, the TOC will be logged into the console for debugging purpose.
 
 ## A Table of Content (TOC) Item
 
@@ -352,7 +352,7 @@ The plugin exports the types `FlexibleTocOptions`, `HeadingParent`, `HeadingDept
 
 ## Compatibility
 
-This plugin works with unified version 6+ and remark version 7+. It is compatible with MDX version.3.
+This plugin works with unified version 6+ and remark version 7+. It is compatible with MDX version 3.
 
 ## Security
 
@@ -378,9 +378,9 @@ Use of `remark-flexible-toc` does not involve rehype (hast) or user content so t
 ### My Recma Plugins
 
 + [`recma-mdx-escape-missing-components`](https://www.npmjs.com/package/recma-mdx-escape-missing-components)
-  – Recma plugin to to set the default value `() => null` for the Components in MDX in case of missing or not provided
+  – Recma plugin to set the default value `() => null` for the Components in MDX in case of missing or not provided
 + [`recma-mdx-change-props`](https://www.npmjs.com/package/recma-mdx-change-props)
-  – Recma plugin to change the 'props' parameter into '_props' in the function '_createMdxContent' in the compiled source in order to be able to use {props.foo} like expressions for the `next-mdx-remote` or `next-mdx-remote-client` users.
+  – Recma plugin to change the 'props' parameter into '_props' in the function '_createMdxContent' in the compiled source in order to be able to use {props.foo} like expressions. It is useful for the `next-mdx-remote` or `next-mdx-remote-client` users in `nextjs` applications.
 
 ## License
 
@@ -388,7 +388,7 @@ Use of `remark-flexible-toc` does not involve rehype (hast) or user content so t
 
 ### Keywords
 
-[unified][unifiednpm] [remark][remarknpm] [remark-plugin][remarkpluginnpm] [mdast][mdastnpm] [markdown][markdownnpm] [mdxnpm][mdxnpm] [remark toc][remarktocnpm] [remark table of contents][remarktableofcontentsnpm]
+[unified][unifiednpm] [remark][remarknpm] [remark-plugin][remarkpluginnpm] [mdast][mdastnpm] [markdown][markdownnpm] [mdx][mdxnpm] [remark toc][remarktocnpm] [remark table of contents][remarktableofcontentsnpm]
 
 [unified]: https://github.com/unifiedjs/unified
 [unifiednpm]: https://www.npmjs.com/search?q=keywords:unified
