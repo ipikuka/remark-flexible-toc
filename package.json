@@ -7,15 +7,15 @@
   "main": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "npm run prebuild && tsc",
-    "lint": "eslint .",
+    "build": "rimraf dist && tsc --build && type-coverage",
+    "format": "npm run prettier && npm run lint",
     "prettier": "prettier --write .",
+    "lint": "eslint .",
     "test": "vitest",
     "test:ci": "vitest --watch=false",
     "test:file": "vitest without_options.spec.ts",
     "prepack": "npm run build",
-    "prepublishOnly": "npm run test:ci && npm run prettier && npm run lint"
+    "prepublishOnly": "npm run test:ci && npm run format"
   },
   "files": [
     "dist/",
@@ -62,6 +62,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.0",
     "rimraf": "^5.0.5",
+    "type-coverage": "^2.27.1",
     "typescript": "^5.4.3",
     "unified": "^11.0.4",
     "vitest": "^1.4.0"
@@ -72,5 +73,12 @@
     "mdast-util-to-string": "^4.0.0",
     "unist-util-visit": "^5.0.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "typeCoverage": {
+    "atLeast": 100,
+    "detail": true,
+    "ignoreAsAssertion": true,
+    "ignoreCatch": true,
+    "strict": true
+  }
 }
