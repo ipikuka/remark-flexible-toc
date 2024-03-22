@@ -20,6 +20,8 @@ const source = dedent`
 
   ### [Mubheading](#)
 
+  ### Custom Heading {#custom-id}
+
   > #### QuoteHeading
   > Some Content
   > #### **QuoteHeading**
@@ -44,10 +46,11 @@ describe("remark-flexible-toc", () => {
         " 2		1.2.      		root      		Section 2       		#section-2          ",
         " 3		1.2.1.    		root      		Subheading      		#subheading-1       ",
         " 3		1.2.2.    		root      		Mubheading      		#mubheading-1       ",
-        " 4		1.2.2.1.  		blockquote		QuoteHeading    		#quoteheading       ",
-        " 4		1.2.2.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
-        " 5		1.2.2.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
-        " 5		1.2.2.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
+        " 3		1.2.3.    		root      		Custom Heading  		#custom-heading     ",
+        " 4		1.2.3.1.  		blockquote		QuoteHeading    		#quoteheading       ",
+        " 4		1.2.3.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
+        " 5		1.2.3.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
+        " 5		1.2.3.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
       ]
     `);
   });
@@ -60,19 +63,20 @@ describe("remark-flexible-toc", () => {
     await process(source, options);
 
     expect(formatTocAsTable(toc)).toMatchInlineSnapshot(`
-          [
-            " 2		1.1.      		root      		Section 1       		#section-1          ",
-            " 3		1.1.1.    		root      		Subheading      		#subheading         ",
-            " 3		1.1.2.    		root      		Mubheading      		#mubheading         ",
-            " 2		1.2.      		root      		Section 2       		#section-2          ",
-            " 3		1.2.1.    		root      		Subheading      		#subheading-1       ",
-            " 3		1.2.2.    		root      		Mubheading      		#mubheading-1       ",
-            " 4		1.2.2.1.  		blockquote		QuoteHeading    		#quoteheading       ",
-            " 4		1.2.2.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
-            " 5		1.2.2.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
-            " 5		1.2.2.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
-          ]
-        `);
+      [
+        " 2		1.1.      		root      		Section 1       		#section-1          ",
+        " 3		1.1.1.    		root      		Subheading      		#subheading         ",
+        " 3		1.1.2.    		root      		Mubheading      		#mubheading         ",
+        " 2		1.2.      		root      		Section 2       		#section-2          ",
+        " 3		1.2.1.    		root      		Subheading      		#subheading-1       ",
+        " 3		1.2.2.    		root      		Mubheading      		#mubheading-1       ",
+        " 3		1.2.3.    		root      		Custom Heading  		#custom-heading     ",
+        " 4		1.2.3.1.  		blockquote		QuoteHeading    		#quoteheading       ",
+        " 4		1.2.3.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
+        " 5		1.2.3.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
+        " 5		1.2.3.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
+      ]
+    `);
   });
 
   // ******************************************
@@ -84,12 +88,13 @@ describe("remark-flexible-toc", () => {
 
     expect(formatTocAsTable(toc)).toMatchInlineSnapshot(`
       [
-        " 2		1.1.  		root		Section 1 		#section-1    ",
-        " 3		1.1.1.		root		Subheading		#subheading   ",
-        " 3		1.1.2.		root		Mubheading		#mubheading   ",
-        " 2		1.2.  		root		Section 2 		#section-2    ",
-        " 3		1.2.1.		root		Subheading		#subheading-1 ",
-        " 3		1.2.2.		root		Mubheading		#mubheading-1 ",
+        " 2		1.1.  		root		Section 1     		#section-1      ",
+        " 3		1.1.1.		root		Subheading    		#subheading     ",
+        " 3		1.1.2.		root		Mubheading    		#mubheading     ",
+        " 2		1.2.  		root		Section 2     		#section-2      ",
+        " 3		1.2.1.		root		Subheading    		#subheading-1   ",
+        " 3		1.2.2.		root		Mubheading    		#mubheading-1   ",
+        " 3		1.2.3.		root		Custom Heading		#custom-heading ",
       ]
     `);
   });
@@ -103,10 +108,11 @@ describe("remark-flexible-toc", () => {
 
     expect(formatTocAsTable(toc)).toMatchInlineSnapshot(`
       [
-        " 3		1.1.1.		root		Subheading		#subheading   ",
-        " 3		1.1.2.		root		Mubheading		#mubheading   ",
-        " 3		1.1.3.		root		Subheading		#subheading-1 ",
-        " 3		1.1.4.		root		Mubheading		#mubheading-1 ",
+        " 3		1.1.1.		root		Subheading    		#subheading     ",
+        " 3		1.1.2.		root		Mubheading    		#mubheading     ",
+        " 3		1.1.3.		root		Subheading    		#subheading-1   ",
+        " 3		1.1.4.		root		Mubheading    		#mubheading-1   ",
+        " 3		1.1.5.		root		Custom Heading		#custom-heading ",
       ]
     `);
   });
@@ -123,12 +129,13 @@ describe("remark-flexible-toc", () => {
 
     expect(formatTocAsTable(toc)).toMatchInlineSnapshot(`
       [
-        " 2		1.1.  		root		Section 1 		#section-1    ",
-        " 3		1.1.1.		root		Subheading		#subheading   ",
-        " 3		1.1.2.		root		Mubheading		#mubheading   ",
-        " 2		1.2.  		root		Section 2 		#section-2    ",
-        " 3		1.2.1.		root		Subheading		#subheading-1 ",
-        " 3		1.2.2.		root		Mubheading		#mubheading-1 ",
+        " 2		1.1.  		root		Section 1     		#section-1      ",
+        " 3		1.1.1.		root		Subheading    		#subheading     ",
+        " 3		1.1.2.		root		Mubheading    		#mubheading     ",
+        " 2		1.2.  		root		Section 2     		#section-2      ",
+        " 3		1.2.1.		root		Subheading    		#subheading-1   ",
+        " 3		1.2.2.		root		Mubheading    		#mubheading-1   ",
+        " 3		1.2.3.		root		Custom Heading		#custom-heading ",
       ]
     `);
   });
@@ -146,10 +153,11 @@ describe("remark-flexible-toc", () => {
         " 3		1.1.1.    		root      		Subheading      		#subheading         ",
         " 2		1.2.      		root      		Section 2       		#section-2          ",
         " 3		1.2.1.    		root      		Subheading      		#subheading-1       ",
-        " 4		1.2.1.1.  		blockquote		QuoteHeading    		#quoteheading       ",
-        " 4		1.2.1.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
-        " 5		1.2.1.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
-        " 5		1.2.1.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
+        " 3		1.2.2.    		root      		Custom Heading  		#custom-heading     ",
+        " 4		1.2.2.1.  		blockquote		QuoteHeading    		#quoteheading       ",
+        " 4		1.2.2.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
+        " 5		1.2.2.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
+        " 5		1.2.2.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
       ]
     `);
   });
@@ -157,7 +165,7 @@ describe("remark-flexible-toc", () => {
   // ******************************************
   it("with exclude but not matched", async () => {
     const toc: TocItem[] = [];
-    const options: FlexibleTocOptions = { tocRef: toc, exclude: ["Section"] };
+    const options: FlexibleTocOptions = { tocRef: toc, exclude: "Section" };
 
     await process(source, options);
 
@@ -169,10 +177,11 @@ describe("remark-flexible-toc", () => {
         " 2		1.2.      		root      		Section 2       		#section-2          ",
         " 3		1.2.1.    		root      		Subheading      		#subheading-1       ",
         " 3		1.2.2.    		root      		Mubheading      		#mubheading-1       ",
-        " 4		1.2.2.1.  		blockquote		QuoteHeading    		#quoteheading       ",
-        " 4		1.2.2.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
-        " 5		1.2.2.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
-        " 5		1.2.2.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
+        " 3		1.2.3.    		root      		Custom Heading  		#custom-heading     ",
+        " 4		1.2.3.1.  		blockquote		QuoteHeading    		#quoteheading       ",
+        " 4		1.2.3.2.  		blockquote		QuoteHeading    		#quoteheading-1     ",
+        " 5		1.2.3.2.1.		listItem  		ListItem Heading		#listitem-heading   ",
+        " 5		1.2.3.2.2.		listItem  		ListItem Heading		#listitem-heading-1 ",
       ]
     `);
   });
@@ -192,10 +201,11 @@ describe("remark-flexible-toc", () => {
         " 2		1.2.      		root      		Section 2       		#prefix-section-2          ",
         " 3		1.2.1.    		root      		Subheading      		#prefix-subheading-1       ",
         " 3		1.2.2.    		root      		Mubheading      		#prefix-mubheading-1       ",
-        " 4		1.2.2.1.  		blockquote		QuoteHeading    		#prefix-quoteheading       ",
-        " 4		1.2.2.2.  		blockquote		QuoteHeading    		#prefix-quoteheading-1     ",
-        " 5		1.2.2.2.1.		listItem  		ListItem Heading		#prefix-listitem-heading   ",
-        " 5		1.2.2.2.2.		listItem  		ListItem Heading		#prefix-listitem-heading-1 ",
+        " 3		1.2.3.    		root      		Custom Heading  		#prefix-custom-heading     ",
+        " 4		1.2.3.1.  		blockquote		QuoteHeading    		#prefix-quoteheading       ",
+        " 4		1.2.3.2.  		blockquote		QuoteHeading    		#prefix-quoteheading-1     ",
+        " 5		1.2.3.2.1.		listItem  		ListItem Heading		#prefix-listitem-heading   ",
+        " 5		1.2.3.2.2.		listItem  		ListItem Heading		#prefix-listitem-heading-1 ",
       ]
     `);
   });

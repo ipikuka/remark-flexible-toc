@@ -1,6 +1,7 @@
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import gfm from "remark-gfm";
+import remarkHeadingId from "remark-heading-id";
 import remarkRehype from "remark-rehype";
 import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
@@ -12,6 +13,7 @@ const compilerCreator = (options?: FlexibleTocOptions) =>
   unified()
     .use(remarkParse)
     .use(gfm)
+    .use(remarkHeadingId)
     .use(plugin, options)
     .use(remarkRehype)
     .use(rehypeFormat)

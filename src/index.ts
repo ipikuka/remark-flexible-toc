@@ -57,7 +57,7 @@ type PartiallyRequiredFlexibleTocOptions = Prettify<
   >
 >;
 
-const DEFAULT_SETTINGS = {
+const DEFAULT_SETTINGS: FlexibleTocOptions = {
   tocName: "toc",
   tocRef: [],
   maxDepth: 6,
@@ -127,7 +127,8 @@ const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
     const tocItems: TocItem[] = [];
 
     visit(tree, "heading", (_node, _index, _parent) => {
-      if (!_parent) return;
+      /* v8 ignore next */
+      if (!_parent || typeof _index === "undefined") return;
 
       const depth = _node.depth;
       const value = toString(_node, { includeImageAlt: false });
