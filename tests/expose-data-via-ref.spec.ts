@@ -1,30 +1,9 @@
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import gfm from "remark-gfm";
-import remarkRehype from "remark-rehype";
-import rehypeStringify from "rehype-stringify";
-import dedent from "dedent";
-import type { VFileCompatible, VFile } from "vfile";
-
 import { describe, it, expect } from "vitest";
+import dedent from "dedent";
 
-import plugin, { FlexibleTocOptions, TocItem } from "../src";
+import type { FlexibleTocOptions, TocItem } from "../src";
 import { formatTocAsTable } from "./util/format";
-
-const compilerCreator = (options?: FlexibleTocOptions) =>
-  unified()
-    .use(remarkParse)
-    .use(gfm)
-    .use(plugin, options)
-    .use(remarkRehype)
-    .use(rehypeStringify);
-
-const process = async (
-  content: VFileCompatible,
-  options?: FlexibleTocOptions,
-): Promise<VFile> => {
-  return compilerCreator(options).process(content);
-};
+import { process } from "./util/index";
 
 const source = dedent`
   # The Main Heading
