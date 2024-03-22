@@ -9,7 +9,7 @@ import type { VFileCompatible, VFile } from "vfile";
 import { describe, it, expect } from "vitest";
 
 import plugin, { FlexibleTocOptions, TocItem } from "../src";
-import { formatTocAsTable } from "./utils";
+import { formatTocAsTable } from "./util/format";
 
 const compilerCreator = (options?: FlexibleTocOptions) =>
   unified()
