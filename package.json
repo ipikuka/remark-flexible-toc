@@ -15,7 +15,8 @@
     "test:ci": "vitest --watch=false",
     "test:file": "vitest without_options.spec.ts",
     "prepack": "npm run build",
-    "prepublishOnly": "npm run test:ci && npm run format"
+    "prepublishOnly": "npm run test:ci && npm run format && npm run test-coverage",
+    "test-coverage": "vitest run --coverage"
   },
   "files": [
     "dist/",
@@ -49,8 +50,10 @@
   "devDependencies": {
     "@types/dedent": "^0.7.2",
     "@types/node": "^20.11.30",
+    "@types/remark-heading-id": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
+    "@vitest/coverage-v8": "^1.4.0",
     "dedent": "^1.5.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -59,6 +62,7 @@
     "rehype-format": "^5.0.0",
     "rehype-stringify": "^10.0.0",
     "remark-gfm": "^4.0.0",
+    "remark-heading-id": "^1.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.0",
     "rimraf": "^5.0.5",
