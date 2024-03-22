@@ -4,6 +4,8 @@
 [![Build][github-build]][github-build-url]
 ![npm-typescript]
 [![License][github-license]][github-license-url]
+[![codecov](https://codecov.io/gh/ipikuka/remark-flexible-toc/graph/badge.svg?token=QBNX6L8W2G)](https://codecov.io/gh/ipikuka/remark-flexible-toc)
+[![type-coverage](https://img.shields.io/badge/dynamic/json.svg?label=type-coverage&prefix=%E2%89%A5&suffix=%&query=$.typeCoverage.atLeast&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fipikuka%2Fremark-flexible-toc%2Fmaster%2Fpackage.json)](https://github.com/ipikuka/remark-flexible-toc)
 
 This package is a [unified][unified] ([remark][remark]) plugin to expose the table of contents via Vfile.data or via an option reference (compatible with new parser "[micromark][micromark]").
 
