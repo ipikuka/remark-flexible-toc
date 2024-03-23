@@ -132,7 +132,7 @@ const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
 
       const depth = _node.depth;
       const value = toString(_node, { includeImageAlt: false });
-      const href = `#${settings.prefix ?? ""}${slugger.slug(value)}`;
+      let href = `#${settings.prefix ?? ""}${slugger.slug(value)}`;
       const parent = _parent.type;
 
       // maxDepth check
@@ -152,6 +152,8 @@ const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
       const data = (_node.data as ExtendedHeadingData)?.hProperties
         ? { ...(_node.data as ExtendedHeadingData).hProperties }
         : undefined;
+
+      if (data?.["id"]) href = `#${data["id"]}`;
 
       tocItems.push({
         value,
