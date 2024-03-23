@@ -1,23 +1,24 @@
 # remark-flexible-toc
 
-[![NPM version][npm-image]][npm-url]
-[![Build][github-build]][github-build-url]
-![npm-typescript]
-[![License][github-license]][github-license-url]
+[![NPM version][badge-npm-version]][npm-package-url]
+[![NPM downloads][badge-npm-download]][npm-package-url]
+[![Build][badge-build]][github-workflow-url]
 [![codecov](https://codecov.io/gh/ipikuka/remark-flexible-toc/graph/badge.svg?token=QBNX6L8W2G)](https://codecov.io/gh/ipikuka/remark-flexible-toc)
 [![type-coverage](https://img.shields.io/badge/dynamic/json.svg?label=type-coverage&prefix=%E2%89%A5&suffix=%&query=$.typeCoverage.atLeast&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fipikuka%2Fremark-flexible-toc%2Fmaster%2Fpackage.json)](https://github.com/ipikuka/remark-flexible-toc)
+[![typescript][badge-typescript]][typescript-url]
+[![License][badge-license]][github-license-url]
 
-This package is a [unified][unified] ([remark][remark]) plugin to expose the table of contents via Vfile.data or via an option reference (compatible with new parser "[micromark][micromark]").
+This package is a [unified][unified] ([remark][remark]) plugin to expose the table of contents via `Vfile.data` or via an option reference in markdown.
 
-"**unified**" is a project that transforms content with abstract syntax trees (ASTs). "**remark**" adds support for markdown to unified. "**mdast**" is the markdown abstract syntax tree (AST) that remark uses.
+**[unified][unified]** is a project that transforms content with abstract syntax trees (ASTs) using the new parser **[micromark][micromark]**. **[remark][remark]** adds support for markdown to unified. **[mdast][mdast]** is the Markdown Abstract Syntax Tree (AST) which is a specification for representing markdown in a syntax tree.
 
-**This plugin is a remark plugin that gets info from the mdast.**
+**This plugin is a remark plugin that doesn't transform the mdast but gets info from the mdast.**
 
 ## When should I use this?
 
 This plugin `remark-flexible-toc` is useful if you want to get the table of contents (TOC) from the markdown/MDX document. The `remark-flexible-toc` exposes the table of contents (TOC) in two ways:
-+ by adding the `toc` into the Vfile.data
-+ by mutating an array of reference if provided in the options
++ by adding the `toc` into the `Vfile.data`
++ by mutating a reference array if provided in the options
 
 ## Installation
 
@@ -69,10 +70,10 @@ async function main() {
     .use(rehypeStringify)
     .process(await read("example.md"));
 
-  // the first way of getting the table of contents (TOC) via file.data
+  // the first way of getting TOC via file.data
   console.log(file.data.toc);
 
-  // the second way of getting the table of contents (TOC), since we provided an array of reference in the options
+  // the second way of getting TOC, since we provided a reference array in the options
   console.log(toc);
 }
 ```
@@ -128,9 +129,9 @@ use(remarkFlexibleToc, {
   maxDepth?: HeadingDepth; // default: 6
   skipLevels?: HeadingDepth[]; // default: [1]
   skipParents?: Exclude<HeadingParent, "root">[]; // default: []
-  exclude?: string | string[]; // default is undefined
-  prefix?: string; // default is undefined
-  fallback?: (toc: TocItem[]) => undefined; // default is undefined
+  exclude?: string | string[];
+  prefix?: string;
+  fallback?: (toc: TocItem[]) => undefined;
 } as FlexibleTocOptions);
 ```
 
@@ -256,11 +257,14 @@ type TocItem = {
   depth: HeadingDepth; // 1 | 2 | 3 | 4 | 5 | 6
   numbering: number[]; // explained below
   parent: HeadingParent; // "root"| "blockquote" | "footnoteDefinition" | "listItem" | "container" | "mdxJsxFlowElement"
-  data?: Record<string, unknown>; // Other remark plugins can store custom data in "node.data.hProperties" like "id" etc.
+  data?: Record<string, unknown>; // Other remark plugins may store custom data in "node.data.hProperties" like "id" etc.
 };
 ```
 
-As a note, the `remark-flexible-toc` uses the `github-slugger` internally for producing unique links. Then, it is possible you to use [`rehype-slug`](https://github.com/rehypejs/rehype-slug) (forIDs on headings) and [`rehype-autolink-headings`](https://github.com/rehypejs/rehype-autolink-headings) (for anchors that link-to-self) because they use the same `github-slugger`.
+> [!NOTE]
+> If there is a remark plugin before the `remark-flexible-toc` in the plugin chain, which provides custom id for headings like `remark-heading-id`, that custom id takes precedence for `href`.
+
+The `remark-flexible-toc` uses the `github-slugger` internally for producing unique links. Then, it is possible you to use [`rehype-slug`](https://github.com/rehypejs/rehype-slug) (forIDs on headings) and [`rehype-autolink-headings`](https://github.com/rehypejs/rehype-autolink-headings) (for anchors that link-to-self) because they use the same `github-slugger`.
 
 As an example for the unique heading links (notice the same heading texts).
 
@@ -311,9 +315,9 @@ The `github-slugger` produces unique links with using a counter mechanism intern
 ]
 ```
 
-## Numbering for Ordered Table of Contents
+## Numbering for Ordered Table of Contents (TOC)
 
-The `remark-flexible-toc` produces always the `numbering` for the TOC items in case you show the ordered TOC.
+The `remark-flexible-toc` produces always the `numbering` for TOC items in case you show the ordered TOC.
 
 The **numbering** of a TOC item is an array of number. The numbers in the `numbering` corresponds the **level of the headers**. With that structure, you know which header is under which header.
 
@@ -348,13 +352,13 @@ This plugin does not modify the `mdast` (markdown abstract syntax tree), collect
 
 ## Types
 
-This package is fully typed with [TypeScript][typeScript].
+This package is fully typed with [TypeScript][typescript].
 
 The plugin exports the types `FlexibleTocOptions`, `HeadingParent`, `HeadingDepth`, `TocItem`.
 
 ## Compatibility
 
-This plugin works with unified version 6+ and remark version 7+. It is compatible with MDX version 3.
+This plugin works with `unified` version 6+ and `remark` version 7+. It is compatible with `mdx` version 2+.
 
 ## Security
 
@@ -362,54 +366,71 @@ Use of `remark-flexible-toc` does not involve rehype (hast) or user content so t
 
 ## My Plugins
 
+I like to contribute the Unified / Remark / MDX ecosystem, so I recommend you to have a look my plugins.
+
 ### My Remark Plugins
 
-+ [`remark-flexible-code-titles`](https://www.npmjs.com/package/remark-flexible-code-titles)
+- [`remark-flexible-code-titles`](https://www.npmjs.com/package/remark-flexible-code-titles)
   – Remark plugin to add titles or/and containers for the code blocks with customizable properties
-+ [`remark-flexible-containers`](https://www.npmjs.com/package/remark-flexible-containers)
+- [`remark-flexible-containers`](https://www.npmjs.com/package/remark-flexible-containers)
   – Remark plugin to add custom containers with customizable properties in markdown
-+ [`remark-ins`](https://www.npmjs.com/package/remark-ins)
+- [`remark-ins`](https://www.npmjs.com/package/remark-ins)
   – Remark plugin to add `ins` element in markdown
-+ [`remark-flexible-paragraphs`](https://www.npmjs.com/package/remark-flexible-paragraphs)
+- [`remark-flexible-paragraphs`](https://www.npmjs.com/package/remark-flexible-paragraphs)
   – Remark plugin to add custom paragraphs with customizable properties in markdown
-+ [`remark-flexible-markers`](https://www.npmjs.com/package/remark-flexible-markers)
+- [`remark-flexible-markers`](https://www.npmjs.com/package/remark-flexible-markers)
   – Remark plugin to add custom `mark` element with customizable properties in markdown
-+ [`remark-flexible-toc`](https://www.npmjs.com/package/remark-flexible-toc)
-  – Remark plugin to expose the table of contents via Vfile.data or via an option reference
+- [`remark-flexible-toc`](https://www.npmjs.com/package/remark-flexible-toc)
+  – Remark plugin to expose the table of contents via `vfile.data` or via an option reference
+- [`remark-mdx-remove-esm`](https://www.npmjs.com/package/remark-mdx-remove-esm)
+  – Remark plugin to remove import and/or export statements (mdxjsEsm)
+
+### My Rehype Plugins
+
+- [`rehype-pre-language`](https://www.npmjs.com/package/rehype-pre-language)
+  – Rehype plugin to add language information as a property to `pre` element
 
 ### My Recma Plugins
 
-+ [`recma-mdx-escape-missing-components`](https://www.npmjs.com/package/recma-mdx-escape-missing-components)
-  – Recma plugin to set the default value `() => null` for the Components in MDX in case of missing or not provided
-+ [`recma-mdx-change-props`](https://www.npmjs.com/package/recma-mdx-change-props)
-  – Recma plugin to change the 'props' parameter into '_props' in the function '_createMdxContent' in the compiled source in order to be able to use {props.foo} like expressions. It is useful for the `next-mdx-remote` or `next-mdx-remote-client` users in `nextjs` applications.
+- [`recma-mdx-escape-missing-components`](https://www.npmjs.com/package/recma-mdx-escape-missing-components)
+  – Recma plugin to set the default value `() => null` for the Components in MDX in case of missing or not provided so as not to throw an error
+- [`recma-mdx-change-props`](https://www.npmjs.com/package/recma-mdx-change-props)
+  – Recma plugin to change the `props` parameter into the `_props` in the `function _createMdxContent(props) {/* */}` in the compiled source in order to be able to use `{props.foo}` like expressions. It is useful for the `next-mdx-remote` or `next-mdx-remote-client` users in `nextjs` applications.
 
 ## License
 
-[MIT][license] © ipikuka
+[MIT License](./LICENSE) © ipikuka
 
 ### Keywords
 
-[unified][unifiednpm] [remark][remarknpm] [remark-plugin][remarkpluginnpm] [mdast][mdastnpm] [markdown][markdownnpm] [mdx][mdxnpm] [remark toc][remarktocnpm] [remark table of contents][remarktableofcontentsnpm]
+🟩 [unified][unifiednpm] 🟩 [remark][remarknpm] 🟩 [remark plugin][remarkpluginnpm] 🟩 [mdast][mdastnpm] 🟩 [markdown][markdownnpm] 🟩 [mdx][mdxnpm] 🟩 [remark toc][remarktocnpm] 🟩 [remark table of contents][remarktableofcontentsnpm]
 
-[unified]: https://github.com/unifiedjs/unified
+
 [unifiednpm]: https://www.npmjs.com/search?q=keywords:unified
-[remark]: https://github.com/remarkjs/remark
 [remarknpm]: https://www.npmjs.com/search?q=keywords:remark
 [remarkpluginnpm]: https://www.npmjs.com/search?q=keywords:remark%20plugin
-[mdast]: https://github.com/syntax-tree/mdast
 [mdastnpm]: https://www.npmjs.com/search?q=keywords:mdast
-[micromark]: https://github.com/micromark/micromark
-[typescript]: https://www.typescriptlang.org/
-[license]: https://github.com/ipikuka/remark-flexible-toc/blob/main/LICENSE
-[mdxnpm]: https://www.npmjs.com/search?q=keywords:mdx
 [markdownnpm]: https://www.npmjs.com/search?q=keywords:markdown
+[mdxnpm]: https://www.npmjs.com/search?q=keywords:mdx
 [remarktocnpm]: https://www.npmjs.com/search?q=keywords:remark%20toc
 [remarktableofcontentsnpm]: https://www.npmjs.com/search?q=keywords:remark%20table%20of%20contents
-[npm-url]: https://www.npmjs.com/package/remark-flexible-toc
-[npm-image]: https://img.shields.io/npm/v/remark-flexible-toc
-[github-license]: https://img.shields.io/github/license/ipikuka/remark-flexible-toc
-[github-license-url]: https://github.com/ipikuka/remark-flexible-toc/blob/master/LICENSE
-[github-build]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml/badge.svg
-[github-build-url]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml
-[npm-typescript]: https://img.shields.io/npm/types/remark-flexible-toc
+
+[unified]: https://github.com/unifiedjs/unified
+[remark]: https://github.com/remarkjs/remark
+[remarkplugins]: https://github.com/remarkjs/remark/blob/main/doc/plugins.md
+[mdast]: https://github.com/syntax-tree/mdast
+[micromark]: https://github.com/micromark/micromark
+[typescript]: https://www.typescriptlang.org/
+
+[badge-npm-version]: https://img.shields.io/npm/v/remark-flexible-toc
+[badge-npm-download]:https://img.shields.io/npm/dt/remark-flexible-toc
+[npm-package-url]: https://www.npmjs.com/package/remark-flexible-toc
+
+[badge-license]: https://img.shields.io/github/license/ipikuka/remark-flexible-toc
+[github-license-url]: https://github.com/ipikuka/remark-flexible-toc/blob/main/LICENSE
+
+[badge-build]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml/badge.svg
+[github-workflow-url]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml
+
+[badge-typescript]: https://img.shields.io/npm/types/remark-flexible-toc
+[typescript-url]: https://www.typescriptlang.org/
