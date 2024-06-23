@@ -389,6 +389,8 @@ I like to contribute the Unified / Remark / MDX ecosystem, so I recommend you to
 
 - [`rehype-pre-language`](https://www.npmjs.com/package/rehype-pre-language)
   – Rehype plugin to add language information as a property to `pre` element
+- [`rehype-highlight-code-lines`](https://www.npmjs.com/package/rehype-highlight-code-lines)
+  – Rehype plugin to add line numbers to code blocks and allow highlighting of desired code lines
 
 ### My Recma Plugins
 
