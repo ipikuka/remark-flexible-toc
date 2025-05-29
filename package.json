@@ -68,14 +68,17 @@
     "rimraf": "^5.0.10",
     "type-coverage": "^2.29.7",
     "typescript": "^5.8.3",
+    "unified": "^11.0.5",
     "vitest": "^3.1.4"
   },
   "dependencies": {
     "@types/mdast": "^4.0.4",
     "github-slugger": "^2.0.0",
     "mdast-util-to-string": "^4.0.0",
-    "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
+  },
+  "peerDependencies": {
+    "unified": "^11"
   },
   "sideEffects": false,
   "typeCoverage": {
