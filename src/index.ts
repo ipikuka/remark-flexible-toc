@@ -4,10 +4,8 @@ import { visit, CONTINUE } from "unist-util-visit";
 import GithubSlugger from "github-slugger";
 import { toString } from "mdast-util-to-string";
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type PartiallyRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 export type HeadingParent =
