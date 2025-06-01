@@ -1,16 +1,16 @@
 # remark-flexible-toc
 
-[![NPM version][badge-npm-version]][npm-package-url]
-[![NPM downloads][badge-npm-download]][npm-package-url]
-[![Build][badge-build]][github-workflow-url]
-[![codecov](https://codecov.io/gh/ipikuka/remark-flexible-toc/graph/badge.svg?token=QBNX6L8W2G)](https://codecov.io/gh/ipikuka/remark-flexible-toc)
-[![type-coverage](https://img.shields.io/badge/dynamic/json.svg?label=type-coverage&prefix=%E2%89%A5&suffix=%&query=$.typeCoverage.atLeast&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fipikuka%2Fremark-flexible-toc%2Fmaster%2Fpackage.json)](https://github.com/ipikuka/remark-flexible-toc)
-[![typescript][badge-typescript]][typescript-url]
-[![License][badge-license]][github-license-url]
+[![npm version][badge-npm-version]][url-npm-package]
+[![npm downloads][badge-npm-download]][url-npm-package]
+[![publish to npm][badge-publish-to-npm]][url-publish-github-actions]
+[![code-coverage][badge-codecov]][url-codecov]
+[![type-coverage][badge-type-coverage]][url-github-package]
+[![typescript][badge-typescript]][url-typescript]
+[![license][badge-license]][url-license]
 
-This package is a [unified][unified] ([remark][remark]) plugin to expose the table of contents via `Vfile.data` or via an option reference in markdown.
+This package is a [**unified**][unified] ([**remark**][remark]) plugin **to expose the table of contents via `Vfile.data` or via an option reference in markdown.**
 
-**[unified][unified]** is a project that transforms content with abstract syntax trees (ASTs) using the new parser **[micromark][micromark]**. **[remark][remark]** adds support for markdown to unified. **[mdast][mdast]** is the Markdown Abstract Syntax Tree (AST) which is a specification for representing markdown in a syntax tree.
+[**unified**][unified] is a project that transforms content with abstract syntax trees (ASTs) using the new parser [**micromark**][micromark]. [**remark**][remark] adds support for markdown to unified. [**mdast**][mdast] is the Markdown Abstract Syntax Tree (AST) which is a specification for representing markdown in a syntax tree.
 
 **This plugin is a remark plugin that doesn't transform the mdast but gets info from the mdast.**
 
@@ -264,7 +264,7 @@ type TocItem = {
 > [!NOTE]
 > If there is a remark plugin before the `remark-flexible-toc` in the plugin chain, which provides custom id for headings like `remark-heading-id`, that custom id takes precedence for `href`.
 
-The `remark-flexible-toc` uses the `github-slugger` internally for producing unique links. Then, it is possible you to use [`rehype-slug`](https://github.com/rehypejs/rehype-slug) (forIDs on headings) and [`rehype-autolink-headings`](https://github.com/rehypejs/rehype-autolink-headings) (for anchors that link-to-self) because they use the same `github-slugger`.
+The `remark-flexible-toc` uses the `github-slugger` internally for producing unique links. Then, it is possible you to use [**rehype-slug**][rehype-slug] (forIDs on headings) and [**rehype-autolink-headings**][rehype-autolink-headings] (for anchors that link-to-self) because they use the same `github-slugger`.
 
 As an example for the unique heading links (notice the same heading texts).
 
@@ -352,9 +352,7 @@ This plugin does not modify the `mdast` (markdown abstract syntax tree), collect
 
 ## Types
 
-This package is fully typed with [TypeScript][typescript].
-
-The plugin exports the types `FlexibleTocOptions`, `HeadingParent`, `HeadingDepth`, `TocItem`.
+This package is fully typed with [TypeScript][url-typescript]. The plugin exports the types `FlexibleTocOptions`, `HeadingParent`, `HeadingDepth`, `TocItem`.
 
 ## Compatibility
 
@@ -432,21 +430,28 @@ I like to contribute the Unified / Remark / MDX ecosystem, so I recommend you to
 [remarktableofcontentsnpm]: https://www.npmjs.com/search?q=keywords:remark%20table%20of%20contents
 
 [unified]: https://github.com/unifiedjs/unified
+[micromark]: https://github.com/micromark/micromark
 [remark]: https://github.com/remarkjs/remark
 [remarkplugins]: https://github.com/remarkjs/remark/blob/main/doc/plugins.md
 [mdast]: https://github.com/syntax-tree/mdast
-[micromark]: https://github.com/micromark/micromark
-[typescript]: https://www.typescriptlang.org/
+[rehype-slug]: https://github.com/rehypejs/rehype-slug
+[rehype-autolink-headings]: https://github.com/rehypejs/rehype-autolink-headings
 
 [badge-npm-version]: https://img.shields.io/npm/v/remark-flexible-toc
 [badge-npm-download]:https://img.shields.io/npm/dt/remark-flexible-toc
-[npm-package-url]: https://www.npmjs.com/package/remark-flexible-toc
+[url-npm-package]: https://www.npmjs.com/package/remark-flexible-toc
+[url-github-package]: https://github.com/ipikuka/remark-flexible-toc
 
 [badge-license]: https://img.shields.io/github/license/ipikuka/remark-flexible-toc
-[github-license-url]: https://github.com/ipikuka/remark-flexible-toc/blob/main/LICENSE
+[url-license]: https://github.com/ipikuka/remark-flexible-toc/blob/main/LICENSE
 
-[badge-build]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml/badge.svg
-[github-workflow-url]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml
+[badge-publish-to-npm]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml/badge.svg
+[url-publish-github-actions]: https://github.com/ipikuka/remark-flexible-toc/actions/workflows/publish.yml
 
 [badge-typescript]: https://img.shields.io/npm/types/remark-flexible-toc
-[typescript-url]: https://www.typescriptlang.org/
+[url-typescript]: https://www.typescriptlang.org/
+
+[badge-codecov]: https://codecov.io/gh/ipikuka/remark-flexible-toc/graph/badge.svg?token=QBNX6L8W2G
+[url-codecov]: https://codecov.io/gh/ipikuka/remark-flexible-toc
+
+[badge-type-coverage]: https://img.shields.io/badge/dynamic/json.svg?label=type-coverage&prefix=%E2%89%A5&suffix=%&query=$.typeCoverage.atLeast&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fipikuka%2Fremark-flexible-toc%2Fmaster%2Fpackage.json
