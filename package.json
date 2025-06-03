@@ -35,11 +35,11 @@
     "markdown",
     "MDX",
     "plugin",
-    "remark-plugin",
+    "remark plugin",
     "TOC",
     "table of contents",
-    "remark-toc",
-    "remark-flexible-toc"
+    "remark toc",
+    "remark flexible toc"
   ],
   "author": "ipikuka <talatkuyuk@gmail.com>",
   "license": "MIT",
