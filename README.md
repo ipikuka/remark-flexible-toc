@@ -12,11 +12,11 @@ This package is a [**unified**][unified] ([**remark**][remark]) plugin **to expo
 
 [**unified**][unified] is a project that transforms content with abstract syntax trees (ASTs) using the new parser [**micromark**][micromark]. [**remark**][remark] adds support for markdown to unified. [**mdast**][mdast] is the Markdown Abstract Syntax Tree (AST) which is a specification for representing markdown in a syntax tree.
 
-**This plugin is a remark plugin that doesn't transform the mdast but gets info from the mdast.**
+**This plugin is a remark plugin that doesn't transform the MDAST but gets info from the MDAST.**
 
 ## When should I use this?
 
-This plugin `remark-flexible-toc` is useful if you want to get the table of contents (TOC) from the markdown/MDX document. The `remark-flexible-toc` exposes the table of contents (TOC) in two ways:
+**`remark-flexible-toc`** is useful if you want to get the table of contents (TOC) from the markdown/MDX document. It exposes the table of contents (TOC) in two ways:
 + by adding the `toc` into the `Vfile.data`
 + by mutating a reference array if provided in the options
 
