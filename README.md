@@ -48,9 +48,9 @@ Say we have the following file, `example.md`, which consists some headings.
 ### Subheading 2
 ```
 
-#### the first way of getting TOC via file.data
+Say `example.js` looks as followings *(two ways):*
 
-And our module, `example.js`, looks as follows:
+#### The first way of getting TOC via file.data
 
 ```javascript
 import { read } from "to-vfile";
@@ -74,9 +74,7 @@ async function main() {
 }
 ```
 
-#### the second way of getting TOC via a reference array in the options
-
-And our module, `example.js`, looks as follows:
+#### The second way of getting TOC via a reference array in the options
 
 ```javascript
 import { read } from "to-vfile";
