@@ -48,6 +48,34 @@ Say we have the following file, `example.md`, which consists some headings.
 ### Subheading 2
 ```
 
+#### the first way of getting TOC via file.data
+
+And our module, `example.js`, looks as follows:
+
+```javascript
+import { read } from "to-vfile";
+import remark from "remark";
+import gfm from "remark-gfm";
+import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
+import remarkFlexibleToc from "remark-flexible-toc";
+
+main();
+
+async function main() {
+  const file = await remark()
+    .use(gfm)
+    .use(remarkFlexibleToc)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process(await read("example.md"));
+
+  console.log(file.data.toc);
+}
+```
+
+#### the second way of getting TOC via a reference array in the options
+
 And our module, `example.js`, looks as follows:
 
 ```javascript
@@ -70,15 +98,11 @@ async function main() {
     .use(rehypeStringify)
     .process(await read("example.md"));
 
-  // the first way of getting TOC via file.data
-  console.log(file.data.toc);
-
-  // the second way of getting TOC, since we provided a reference array in the options
   console.log(toc);
 }
 ```
 
-Now, running `node example.js` you see that the same table of contents is logged in the console:
+Now, running both `node example.js` you will see that the same table of contents (TOC) is logged in the console:
 
 ```javascript
 [
