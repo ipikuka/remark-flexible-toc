@@ -153,7 +153,7 @@ use(remarkFlexibleToc, {
   skipParents?: Exclude<HeadingParent, "root">[]; // default: []
   exclude?: string | string[];
   prefix?: string;
-  fallback?: (toc: TocItem[]) => undefined;
+  callback?: (toc: TocItem[]) => undefined;
 } as FlexibleTocOptions);
 ```
 
