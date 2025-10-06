@@ -106,7 +106,7 @@ Now, running `node example.js` you see that the same table of contents is logged
 ]
 ```
 
-Without `remark-flexible-toc`, there wouldn't be any `toc` key in the `file.data`:
+Without **`remark-flexible-toc`**, there wouldn't be any `toc` key in the `file.data`:
 
 ## Options
 
@@ -150,7 +150,7 @@ Now, the TOC is accessable via `vfile.data.headings`.
 
 #### `tocRef`
 
-It is an **array of reference** option for getting the table of contents (TOC), which is the second way of getting the TOC from the `remark-flexible-toc`.
+It is an **array of reference** option for getting the table of contents (TOC), which is the second way of getting the TOC from **`remark-flexible-toc`**.
 
 The reference array should be an empty array, if not, it is emptied by the plugin.
 
@@ -262,9 +262,9 @@ type TocItem = {
 ```
 
 > [!NOTE]
-> If there is a remark plugin before the `remark-flexible-toc` in the plugin chain, which provides custom id for headings like `remark-heading-id`, that custom id takes precedence for `href`.
+> If there is a remark plugin before **`remark-flexible-toc`** in the plugin chain, which provides custom id for headings like **`remark-heading-id`**, that custom id takes precedence for `href`.
 
-The `remark-flexible-toc` uses the `github-slugger` internally for producing unique links. Then, it is possible you to use [**rehype-slug**][rehype-slug] (forIDs on headings) and [**rehype-autolink-headings**][rehype-autolink-headings] (for anchors that link-to-self) because they use the same `github-slugger`.
+**`remark-flexible-toc`** uses the **`github-slugger`** internally for producing unique links. Then, it is possible you to use [**rehype-slug**][rehype-slug] (forIDs on headings) and [**rehype-autolink-headings**][rehype-autolink-headings] (for anchors that link-to-self) because they use the same **`github-slugger`**.
 
 As an example for the unique heading links (notice the same heading texts).
 
@@ -317,7 +317,7 @@ The `github-slugger` produces unique links with using a counter mechanism intern
 
 ## Numbering for Ordered Table of Contents (TOC)
 
-The `remark-flexible-toc` produces always the `numbering` for TOC items in case you show the ordered TOC.
+**`remark-flexible-toc`** produces always the `numbering` for TOC items in case you show the ordered TOC.
 
 The **numbering** of a TOC item is an array of number. The numbers in the `numbering` corresponds the **level of the headers**. With that structure, you know which header is under which header.
 
@@ -360,7 +360,7 @@ This plugin works with `unified` version 6+ and `remark` version 7+. It is compa
 
 ## Security
 
-Use of `remark-flexible-toc` does not involve rehype (hast) or user content so there are no openings for cross-site scripting (XSS) attacks.
+Use of **`remark-flexible-toc`** does not involve rehype (hast) or user content so there are no openings for cross-site scripting (XSS) attacks.
 
 ## My Plugins
 
