@@ -98,7 +98,8 @@ function addNumbering(arr: TocItem[]) {
           () => 1,
         ) as HeadingDepth[]),
       ];
-    } else if (depth < prevDepth) {
+    } else {
+      // if (depth < prevDepth)
       numbering = prevNumbering.slice(0, depth);
       numbering[depth - 1]++;
     }
@@ -125,7 +126,7 @@ const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
     const tocItems: TocItem[] = [];
 
     visit(tree, "heading", (_node, _index, _parent) => {
-      /* v8 ignore next */
+      /* v8 ignore next -- @preserve */
       if (!_parent || typeof _index === "undefined") return;
 
       const depth = _node.depth;
