@@ -1,3 +1,11 @@
+### [Become a sponsor](https://github.com/sponsors/ipikuka) 🚀
+
+If you find **`remark-flexible-toc`** useful in your projects, consider supporting my work.  
+Your sponsorship means a lot 💖
+
+Be the **first sponsor** and get featured here and on [my sponsor wall](https://github.com/sponsors/ipikuka).  
+Thank you for supporting open source! 🙌
+
 # remark-flexible-toc
 
 [![npm version][badge-npm-version]][url-npm-package]
@@ -286,7 +294,7 @@ type TocItem = {
 > [!NOTE]
 > If there is a remark plugin before **`remark-flexible-toc`** in the plugin chain, which provides custom id for headings like **`remark-heading-id`**, that custom id takes precedence for `href`.
 
-**`remark-flexible-toc`** uses the **`github-slugger`** internally for producing unique links. Then, it is possible you to use [**rehype-slug**][rehype-slug] (forIDs on headings) and [**rehype-autolink-headings**][rehype-autolink-headings] (for anchors that link-to-self) because they use the same **`github-slugger`**.
+**`remark-flexible-toc`** uses **`github-slugger`** internally for producing unique links. Then, it is possible you to use [**rehype-slug**][rehype-slug] (forIDs on headings) and [**rehype-autolink-headings**][rehype-autolink-headings] (for anchors that link-to-self) because they use the same **`github-slugger`**.
 
 As an example for the unique heading links (notice the same heading texts).
 
