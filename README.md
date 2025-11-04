@@ -25,7 +25,7 @@ This package is a [**unified**][unified] ([**remark**][remark]) plugin **to expo
 ## When should I use this?
 
 **`remark-flexible-toc`** is useful if you want to get the table of contents (TOC) from the markdown/MDX document. It exposes the table of contents (TOC) in two ways:
-+ by adding the `toc` into the `Vfile.data`
++ by adding a `toc` object into `Vfile.data`
 + by mutating a reference array if provided in the options
 
 ## Installation
@@ -190,7 +190,7 @@ If you use _typescript_, the array reference should be `const toc: TocItem[] = [
 const toc = [];
 
 use(remarkFlexibleToc, {
-  tocRef: toc; // the `remark-flexible-toc` mutates the array of reference
+  tocRef: toc; // `remark-flexible-toc` mutates the array of reference
 });
 ```
 
