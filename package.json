@@ -1,6 +1,6 @@
 {
   "name": "remark-flexible-toc",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Remark plugin to expose the table of contents via Vfile.data or via an option reference",
   "type": "module",
   "main": "./dist/index.js",
