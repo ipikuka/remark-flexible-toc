@@ -79,7 +79,7 @@ function addNumbering(arr: TocItem[]) {
     const tocItem = arr[i];
     const depth = tocItem.depth;
 
-    let numbering: number[] = [];
+    let numbering: number[];
 
     const prevObj = i > 0 ? arr[i - 1] : undefined;
     const prevDepth = prevObj ? prevObj.depth : undefined;
