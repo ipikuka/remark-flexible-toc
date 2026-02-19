@@ -81,7 +81,7 @@
     "@types/mdast": "^4.0.4",
     "github-slugger": "^2.0.0",
     "mdast-util-to-string": "^4.0.0",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.1.0"
   },
   "peerDependencies": {
     "unified": "^11"
