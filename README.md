@@ -298,7 +298,7 @@ type TocItem = {
 ```
 
 > [!NOTE]
-> If there is a remark plugin before **`remark-flexible-toc`** in the plugin chain, which provides custom id for headings like **`remark-heading-id`**, that custom id takes precedence for `href`.
+> If there is a remark plugin before **`remark-flexible-toc`** in the plugin chain like **`remark-heading-id`** or **`remark-custom-header-id`**, which provides custom id for headings, that custom id takes precedence for `href`.
 
 **`remark-flexible-toc`** uses **`github-slugger`** internally for producing unique links. Then, it is possible you to use [**rehype-slug**][rehype-slug] (forIDs on headings) and [**rehype-autolink-headings**][rehype-autolink-headings] (for anchors that link-to-self) because they use the same **`github-slugger`**.
 
