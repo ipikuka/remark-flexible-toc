@@ -1,5 +1,5 @@
-import { type Plugin } from "unified";
-import { type Root, type HeadingData } from "mdast";
+import type { Plugin } from "unified";
+import type { Root } from "mdast";
 import { visit, CONTINUE } from "unist-util-visit";
 import GithubSlugger from "github-slugger";
 import { toString } from "mdast-util-to-string";
@@ -62,8 +62,6 @@ const DEFAULT_SETTINGS: FlexibleTocOptions = {
   skipLevels: [1],
   skipParents: [],
 };
-
-type ExtendedHeadingData = HeadingData & { hProperties: Record<string, unknown> };
 
 /**
  * adds numberings to the TOC items.
@@ -148,20 +146,28 @@ const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
 
       // Other remark plugins can store custom data in node.data.hProperties
       // I omitted node.data.hName and node.data.hChildren since not related with toc
-      const data = (_node.data as ExtendedHeadingData)?.hProperties
-        ? { ...(_node.data as ExtendedHeadingData).hProperties }
+      const nodeData = _node.data?.hProperties;
+
+      // the structured copy avoiding runtime failure in older environments
+      const data = nodeData
+        ? typeof structuredClone === "function"
+          ? structuredClone(nodeData)
+          : JSON.parse(JSON.stringify(nodeData))
         : undefined;
 
       if (data?.["id"]) href = `#${data["id"]}`;
 
-      tocItems.push({
+      const tocItem: TocItem = {
         value,
         href,
         depth,
         numbering: [],
         parent,
-        ...(data && { data }),
-      });
+      };
+
+      if (data) tocItem.data = data;
+
+      tocItems.push(tocItem);
 
       return CONTINUE;
     });
