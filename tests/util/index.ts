@@ -7,7 +7,7 @@ import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
 import type { VFileCompatible, VFile } from "vfile";
 
-import plugin, { type FlexibleTocOptions } from "../../src";
+import plugin, { type FlexibleTocOptions } from "../../src/index.js";
 
 const compilerCreator = (options?: FlexibleTocOptions) =>
   unified()

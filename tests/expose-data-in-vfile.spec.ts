@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import dedent from "dedent";
 
-import type { FlexibleTocOptions, TocItem } from "../src";
-import { formatTocAsTable } from "./util/format";
-import { process } from "./util/index";
+import type { FlexibleTocOptions, TocItem } from "../src/index.js";
+import { formatTocAsTable } from "./util/format.js";
+import { process } from "./util/index.js";
 
 const source = dedent`
   # The Main Heading

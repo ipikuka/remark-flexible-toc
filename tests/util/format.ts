@@ -1,4 +1,4 @@
-import { type TocItem } from "../../src";
+import { type TocItem } from "../../src/index.js";
 
 export function formatTocAsTable(toc: TocItem[]): string[] {
   const columnOrder = ["depth", "numbering", "parent", "value", "href"] as Array<keyof TocItem>;
