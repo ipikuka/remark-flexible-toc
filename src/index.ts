@@ -24,7 +24,9 @@ export type TocItem = {
   depth: HeadingDepth;
   numbering: number[];
   parent: HeadingParent;
-  data?: Record<string, unknown>;
+  data?: {
+    [PropertyName: string]: string | number | boolean | (string | number)[] | null | undefined;
+  };
 };
 
 /**
@@ -146,28 +148,22 @@ const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
 
       // Other remark plugins can store custom data in node.data.hProperties
       // I omitted node.data.hName and node.data.hChildren since not related with toc
-      const nodeData = _node.data?.hProperties;
 
-      // the structured copy avoiding runtime failure in older environments
-      const data = nodeData
-        ? typeof structuredClone === "function"
-          ? structuredClone(nodeData)
-          : JSON.parse(JSON.stringify(nodeData))
-        : undefined;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore, vscode resolves the type but tsc build raises an error awkwardly, saying "hProperties" does not exist in "HeadingData".
+      const hProperties = _node.data?.hProperties;
+      const data = hProperties ? { ...hProperties } : undefined;
 
       if (data?.["id"]) href = `#${data["id"]}`;
 
-      const tocItem: TocItem = {
+      tocItems.push({
         value,
         href,
         depth,
         numbering: [],
         parent,
-      };
-
-      if (data) tocItem.data = data;
-
-      tocItems.push(tocItem);
+        ...(data && { data }),
+      });
 
       return CONTINUE;
     });
