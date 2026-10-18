@@ -1,7 +1,10 @@
 import { describe, it, expect } from "vitest";
 import type { Root } from "mdast";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import dedent from "dedent";
 
-import { generateTocItemsFromMdast } from "../src/index.js";
+import { process } from "./util/index.js";
+import { generateTocItemsFromMdast, type TocItem } from "../src/index.js";
 
 describe("generateTocItemsFromMdast", () => {
   // ******************************************
@@ -180,5 +183,91 @@ describe("generateTocItemsFromMdast", () => {
         parent: "root",
       },
     ]);
+  });
+
+  it("generates the same toc items as the remark plugin 1", async () => {
+    const source = dedent`
+      # Level 1
+
+      ## Level 2
+
+      > ### Level 3 Blockquote
+
+      - #### Level 4 List Item
+    `;
+
+    const expected: TocItem[] = [
+      {
+        value: "Level 1",
+        href: "#level-1",
+        depth: 1,
+        numbering: [1],
+        parent: "root",
+      },
+      {
+        value: "Level 2",
+        href: "#level-2",
+        depth: 2,
+        numbering: [1, 1],
+        parent: "root",
+      },
+      {
+        value: "Level 3 Blockquote",
+        href: "#level-3-blockquote",
+        depth: 3,
+        numbering: [1, 1, 1],
+        parent: "blockquote",
+      },
+      {
+        value: "Level 4 List Item",
+        href: "#level-4-list-item",
+        depth: 4,
+        numbering: [1, 1, 1, 1],
+        parent: "listItem",
+      },
+    ];
+
+    const tree = fromMarkdown(source);
+    const tocItems = generateTocItemsFromMdast(tree, { skipLevels: [] });
+    expect(tocItems).toEqual(expected);
+
+    const tocRef: TocItem[] = [];
+    await process(source, { tocRef, skipLevels: [] });
+    expect(tocRef).toEqual(tocItems);
+  });
+
+  it("generates the same toc items as the remark plugin 2", async () => {
+    const source = dedent`
+      # Article Title
+
+      ## Section
+
+      ### Subsection
+    `;
+
+    const expected: TocItem[] = [
+      {
+        value: "Section",
+        href: "#section",
+        depth: 2,
+        numbering: [1, 1],
+        parent: "root",
+      },
+      {
+        value: "Subsection",
+        href: "#subsection",
+        depth: 3,
+        numbering: [1, 1, 1],
+        parent: "root",
+      },
+    ];
+
+    const tree = fromMarkdown(source);
+    const tocItems = generateTocItemsFromMdast(tree);
+    expect(tocItems).toEqual(expected);
+
+    const tocRef: TocItem[] = [];
+    await process(source, { tocRef });
+    expect(tocRef).toEqual(tocItems);
   });
 });
