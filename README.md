@@ -20,6 +20,8 @@ A warm thanks 🙌 to [@ErfanEbrahimnia](https://github.com/ErfanEbrahimnia), [@
 
 This package is a [**unified**][unified] ([**remark**][remark]) plugin **to expose the table of contents via `Vfile.data` or via an option reference in markdown.**
 
+**`remark-flexible-toc`** also exports `generateTocItemsFromMdast` to generate the table of contents items directly from an MDAST tree without requiring a unified processor or a VFile.
+
 [**unified**][unified] is a project that transforms content with abstract syntax trees (ASTs) using the new parser [**micromark**][micromark]. [**remark**][remark] adds support for markdown to unified. [**mdast**][mdast] is the Markdown Abstract Syntax Tree (AST) which is a specification for representing markdown in a syntax tree.
 
 **This plugin is a remark plugin that doesn't transform the MDAST but gets info from the MDAST.**
@@ -29,6 +31,7 @@ This package is a [**unified**][unified] ([**remark**][remark]) plugin **to expo
 **`remark-flexible-toc`** is useful if you want to get the table of contents (TOC) from the markdown/MDX document. It exposes the table of contents (TOC) in two ways:
 + by adding a `toc` object into `Vfile.data`
 + by mutating a reference array if provided in the options
++ by generating `TocItem[]` directly from an MDAST tree with `generateTocItemsFromMdast`
 
 ## Installation
 
@@ -140,6 +143,24 @@ Now, running both `node example.js` you will see that the same table of contents
 
 Without **`remark-flexible-toc`**, there wouldn't be any `toc` key in the `file.data`:
 
+#### Generating TOC items directly from MDAST
+
+If you already have an MDAST tree, you can generate the table of contents items directly without using the remark plugin, a unified processor, or a VFile.
+
+```js
+import { generateTocItemsFromMdast } from "remark-flexible-toc";
+
+const tocItems = generateTocItemsFromMdast(tree, {
+  maxDepth: 4,
+});
+
+console.log(tocItems);
+```
+
+The function returns `TocItem[]` and does not modify the MDAST tree.
+
+The available options are `maxDepth`, `skipLevels`, `skipParents`, `exclude`, and `prefix`.
+
 ## Options
 
 All options are **optional**.
@@ -165,6 +186,16 @@ use(remarkFlexibleToc, {
   prefix?: string;
   callback?: (toc: TocItem[]) => undefined;
 } as FlexibleTocOptions);
+```
+
+`generateTocItemsFromMdast` accepts only the options related to generating the TOC items. The plugin-specific `tocName`, `tocRef`, and `callback` options are not applicable.
+
+```ts
+type GenerateTocItemsOptions = Pick<
+  FlexibleTocOptions,
+  "maxDepth" | "skipLevels" | "skipParents" | "exclude" | "prefix"
+>;
+
 ```
 
 #### `tocName`
@@ -382,9 +413,13 @@ tocItem.numbering.join("-");
 
 This plugin does not modify the `mdast` (markdown abstract syntax tree), collects data from the `mdast` and adds information into the `vfile.data` if required.
 
+`generateTocItemsFromMdast` also does not modify the provided MDAST tree.
+
 ## Types
 
-This package is fully typed with [TypeScript][url-typescript]. The plugin exports the types `FlexibleTocOptions`, `HeadingParent`, `HeadingDepth`, `TocItem`.
+This package is fully typed with [TypeScript][url-typescript] and also exports the `generateTocItemsFromMdast` utility function.
+
+The plugin exports the types `FlexibleTocOptions`, `HeadingParent`, `HeadingDepth`, `TocItem` and `GenerateTocItemsOptions`.
 
 ## Compatibility
 

@@ -9,12 +9,7 @@ export type Prettify<T> = { [K in keyof T]: T[K] } & {};
 export type PartiallyRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 export type HeadingParent =
-  | "root"
-  | "blockquote"
-  | "footnoteDefinition"
-  | "listItem"
-  | "container"
-  | "mdxJsxFlowElement";
+  "root" | "blockquote" | "footnoteDefinition" | "listItem" | "container" | "mdxJsxFlowElement";
 
 export type HeadingDepth = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -49,6 +44,11 @@ export type FlexibleTocOptions = {
   prefix?: string;
   callback?: (toc: TocItem[]) => undefined;
 };
+
+export type GenerateTocItemsOptions = Pick<
+  FlexibleTocOptions,
+  "maxDepth" | "skipLevels" | "skipParents" | "exclude" | "prefix"
+>;
 
 type PartiallyRequiredFlexibleTocOptions = Prettify<
   PartiallyRequired<
@@ -108,7 +108,10 @@ function addNumbering(arr: TocItem[]) {
   }
 }
 
-const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
+export function generateTocItemsFromMdast(
+  tree: Root,
+  options?: GenerateTocItemsOptions,
+): TocItem[] {
   const settings = Object.assign(
     {},
     DEFAULT_SETTINGS,
@@ -121,54 +124,66 @@ const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
       ? new RegExp("^(" + settings.exclude.join("|") + ")$", "i")
       : new RegExp("^(" + settings.exclude + ")$", "i"));
 
-  return (tree, file) => {
-    const slugger = new GithubSlugger();
-    const tocItems: TocItem[] = [];
+  const slugger = new GithubSlugger();
+  const tocItems: TocItem[] = [];
 
-    visit(tree, "heading", (_node, _index, _parent) => {
-      /* v8 ignore next -- @preserve */
-      if (!_parent || typeof _index === "undefined") return;
+  visit(tree, "heading", (_node, _index, _parent) => {
+    /* v8 ignore next -- @preserve */
+    if (!_parent || typeof _index === "undefined") return;
 
-      const depth = _node.depth;
-      const value = toString(_node, { includeImageAlt: false });
-      let href = `#${settings.prefix ?? ""}${slugger.slug(value)}`;
-      const parent = _parent.type;
+    const depth = _node.depth;
+    const value = toString(_node, { includeImageAlt: false });
+    let href = `#${settings.prefix ?? ""}${slugger.slug(value)}`;
+    const parent = _parent.type;
 
-      // maxDepth check
-      if (depth > settings.maxDepth) return CONTINUE;
+    // maxDepth check
+    if (depth > settings.maxDepth) return CONTINUE;
 
-      // skipLevels check
-      if (settings.skipLevels.includes(depth)) return CONTINUE;
+    // skipLevels check
+    if (settings.skipLevels.includes(depth)) return CONTINUE;
 
-      // skipParents check
-      if (parent !== "root" && settings.skipParents.includes(parent)) return CONTINUE;
+    // skipParents check
+    if (parent !== "root" && settings.skipParents.includes(parent)) return CONTINUE;
 
-      // exclude check
-      if (exludeRegexFilter && exludeRegexFilter.test(value)) return CONTINUE;
+    // exclude check
+    if (exludeRegexFilter && exludeRegexFilter.test(value)) return CONTINUE;
 
-      // Other remark plugins can store custom data in node.data.hProperties
-      // I omitted node.data.hName and node.data.hChildren since not related with toc
+    // Other remark plugins can store custom data in node.data.hProperties
+    // I omitted node.data.hName and node.data.hChildren since not related with toc
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore, vscode resolves the type but tsc build raises an error awkwardly, saying "hProperties" does not exist in "HeadingData".
-      const hProperties = _node.data?.hProperties;
-      const data = hProperties ? { ...hProperties } : undefined;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore, vscode resolves the type but tsc build raises an error awkwardly, saying "hProperties" does not exist in "HeadingData".
+    const hProperties = _node.data?.hProperties;
+    const data = hProperties ? { ...hProperties } : undefined;
 
-      if (data?.["id"]) href = `#${data["id"]}`;
+    if (data?.["id"]) href = `#${data["id"]}`;
 
-      tocItems.push({
-        value,
-        href,
-        depth,
-        numbering: [],
-        parent,
-        ...(data && { data }),
-      });
-
-      return CONTINUE;
+    tocItems.push({
+      value,
+      href,
+      depth,
+      numbering: [],
+      parent,
+      ...(data && { data }),
     });
 
-    addNumbering(tocItems);
+    return CONTINUE;
+  });
+
+  addNumbering(tocItems);
+
+  return tocItems;
+}
+
+const RemarkFlexibleToc: Plugin<[FlexibleTocOptions?], Root> = (options) => {
+  const settings = Object.assign(
+    {},
+    DEFAULT_SETTINGS,
+    options,
+  ) as PartiallyRequiredFlexibleTocOptions;
+
+  return (tree, file) => {
+    const tocItems = generateTocItemsFromMdast(tree, options);
 
     // it is allowed to modify the TOC in the callback
     settings.callback?.(tocItems);
