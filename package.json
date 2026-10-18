@@ -55,6 +55,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.5",
+    "@types/ungap__structured-clone": "^1.0.0",
     "@vitest/coverage-v8": "^4.1.12",
     "@vitest/eslint-plugin": "^1.6.27",
     "dedent": "^1.7.2",
@@ -79,8 +80,10 @@
   },
   "dependencies": {
     "@types/mdast": "^4.0.4",
+    "@ungap/structured-clone": "^1.0.0",
     "github-slugger": "^2.0.0",
     "mdast-util-to-string": "^4.0.0",
+    "unist-util-is": "^6.0.0",
     "unist-util-visit": "^5.1.0"
   },
   "peerDependencies": {

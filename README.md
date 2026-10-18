@@ -118,6 +118,7 @@ Now, running both `node example.js` you will see that the same table of contents
 ```javascript
 [
   {
+    content: [{ type: "text", value: "Section" }],
     depth: 2,
     href: "#section",
     numbering: [1, 1],
@@ -125,6 +126,7 @@ Now, running both `node example.js` you will see that the same table of contents
     value: "Section",
   },
   {
+    content: [{ type: "text", value: "Subheading 1" }],
     depth: 3,
     href: "#subheading-1",
     numbering: [1, 1, 1],
@@ -132,6 +134,7 @@ Now, running both `node example.js` you will see that the same table of contents
     value: "Subheading 1",
   },
   {
+    content: [{ type: "text", value: "Subheading 2" }],
     depth: 3,
     href: "#subheading-2",
     numbering: [1, 1, 2],
@@ -159,13 +162,15 @@ console.log(tocItems);
 
 The function returns `TocItem[]` and does not modify the MDAST tree.
 
-The available options are `maxDepth`, `skipLevels`, `skipParents`, `exclude`, and `prefix`.
+The available options are `maxDepth`, `skipLevels`, `includeParents`, `skipParents`, `exclude`, `prefix`, and `after`.
 
 ## Options
 
 All options are **optional**.
 
 ```typescript
+import type { Test } from "unist-util-is";
+
 type HeadingParent =
   | "root"
   | "blockquote"
@@ -181,9 +186,11 @@ use(remarkFlexibleToc, {
   tocRef?: TocItem[]; // default: []
   maxDepth?: HeadingDepth; // default: 6
   skipLevels?: HeadingDepth[]; // default: [1]
-  skipParents?: Exclude<HeadingParent, "root">[]; // default: []
+  includeParents?: Test;
+  skipParents?: Test;
   exclude?: string | string[];
   prefix?: string;
+  after?: string;
   callback?: (toc: TocItem[]) => undefined;
 } as FlexibleTocOptions);
 ```
@@ -193,7 +200,13 @@ use(remarkFlexibleToc, {
 ```ts
 type GenerateTocItemsOptions = Pick<
   FlexibleTocOptions,
-  "maxDepth" | "skipLevels" | "skipParents" | "exclude" | "prefix"
+  | "maxDepth"
+  | "skipLevels"
+  | "includeParents"
+  | "skipParents"
+  | "exclude"
+  | "prefix"
+  | "after"
 >;
 
 ```
@@ -257,9 +270,25 @@ use(remarkFlexibleToc, {
 
 Now, the TOC consists only the third level headings.
 
+#### `includeParents`
+
+It uses a [`unist-util-is`][unist-util-is] compatible **`Test`** to allow headings to be children of certain nodes.
+
+The option has no default value, meaningly there is no parent restriction by default.
+
+```javascript
+use(remarkFlexibleToc, {
+  includeParents: ["root", "listItem"];
+});
+```
+
+Now, only the headings whose immediate parent is the `root` or a `listItem` will be added into the TOC.
+
 #### `skipParents`
 
-By default it is an empty array `[]`. The array may contain the parent values `blockquote`, `footnoteDefinition`, `listItem`, `container`, `mdxJsxFlowElement`.
+It uses a [`unist-util-is`][unist-util-is] compatible **`Test`** to disallow headings to be children of certain nodes.
+
+The option has no default value, meaningly there is no parent to be skipped by default.
 
 ```javascript
 use(remarkFlexibleToc, {
@@ -268,6 +297,8 @@ use(remarkFlexibleToc, {
 ```
 
 Now, the headings in the `<blockquote>` will not be added into the TOC.
+
+If `includeParents` and `skipParents` match the same parent, `skipParents` wins. The `root` is not protected specially and can also be skipped.
 
 #### `exclude`
 
@@ -295,6 +326,22 @@ use(remarkFlexibleToc, {
 ```
 Now, all TOC items' `href`s will start with that prefix like `#text-prefix-the-subheading`.
 
+#### `after`
+
+It is a **string** option for indicating a heading section after which the TOC items will be generated.
+
+The plugin wraps the string in new RegExp('^(' + value + ')$', 'i'), so the first heading matching this expression is used. The matched heading and its section are not included. The collection starts with the next heading having the same or a higher level, and continues with the following headings.
+
+The option has no default value.
+
+```javascript
+use(remarkFlexibleToc, {
+  after: "(table[ -]of[ -])?contents?|toc";
+});
+```
+
+This is useful when a table of contents heading already exists in the document and you want to generate the TOC items only for the headings after that section.
+
 #### `callback`
 
 It is a **callback function** `callback?: (toc: TocItem[]) => undefined;` which takes the TOC items as an argument and returns nothing. It is usefull for logging the TOC, forexample, or modifing the TOC. **It is allowed that the callback function is able to mutate the TOC items !**
@@ -314,8 +361,11 @@ Now, each time when you compile the source, the TOC will be logged into the cons
 ## A Table of Content (TOC) Item
 
 ```typescript
+import type { PhrasingContent } from "mdast";
+
 type TocItem = {
   value: string; // heading text
+  content: PhrasingContent[]; // normalized rich heading content to be used safely inside a TOC link
   href: string; // produced uniquely by "github-slugger" using the value of the heading
   depth: HeadingDepth; // 1 | 2 | 3 | 4 | 5 | 6
   numbering: number[]; // explained below
@@ -323,6 +373,8 @@ type TocItem = {
   data?: Record<string, unknown>; // Other remark plugins may store custom data in "node.data.hProperties" like "id" etc.
 };
 ```
+
+The `content` keeps the rich MDAST phrasing content of the heading. Links and link references are unwrapped to prevent nested links, footnote references are omitted, and position information is removed. The content is cloned, so mutating it does not mutate the heading in the MDAST tree.
 
 > [!NOTE]
 > If there is a remark plugin before **`remark-flexible-toc`** in the plugin chain like **`remark-heading-id`** or **`remark-custom-header-id`**, which provides custom id for headings, that custom id takes precedence for `href`.
@@ -506,6 +558,7 @@ I also build low-level utilities and plugins for the Unified ecosystem that can 
 [remark]: https://github.com/remarkjs/remark
 [remarkplugins]: https://github.com/remarkjs/remark/blob/main/doc/plugins.md
 [mdast]: https://github.com/syntax-tree/mdast
+[unist-util-is]: https://github.com/syntax-tree/unist-util-is
 [rehype-slug]: https://github.com/rehypejs/rehype-slug
 [rehype-autolink-headings]: https://github.com/rehypejs/rehype-autolink-headings
 

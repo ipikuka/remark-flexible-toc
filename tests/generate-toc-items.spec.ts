@@ -6,6 +6,12 @@ import dedent from "dedent";
 import { process } from "./util/index.js";
 import { generateTocItemsFromMdast, type TocItem } from "../src/index.js";
 
+const omitContent = (tocItems: TocItem[]) =>
+  tocItems.map(({ content, ...tocItem }) => {
+    void content;
+    return tocItem;
+  });
+
 describe("generateTocItemsFromMdast", () => {
   // ******************************************
   it("generates toc items from headings at every level and different parents", () => {
@@ -88,9 +94,11 @@ describe("generateTocItemsFromMdast", () => {
     } as Root;
 
     expect(
-      generateTocItemsFromMdast(tree, {
-        skipLevels: [],
-      }),
+      omitContent(
+        generateTocItemsFromMdast(tree, {
+          skipLevels: [],
+        }),
+      ),
     ).toEqual([
       {
         value: "Level 1",
@@ -167,7 +175,7 @@ describe("generateTocItemsFromMdast", () => {
       ],
     } as Root;
 
-    expect(generateTocItemsFromMdast(tree)).toEqual([
+    expect(omitContent(generateTocItemsFromMdast(tree))).toEqual([
       {
         value: "Section",
         href: "#section",
@@ -196,7 +204,7 @@ describe("generateTocItemsFromMdast", () => {
       - #### Level 4 List Item
     `;
 
-    const expected: TocItem[] = [
+    const expected: Omit<TocItem, "content">[] = [
       {
         value: "Level 1",
         href: "#level-1",
@@ -229,7 +237,7 @@ describe("generateTocItemsFromMdast", () => {
 
     const tree = fromMarkdown(source);
     const tocItems = generateTocItemsFromMdast(tree, { skipLevels: [] });
-    expect(tocItems).toEqual(expected);
+    expect(omitContent(tocItems)).toEqual(expected);
 
     const tocRef: TocItem[] = [];
     await process(source, { tocRef, skipLevels: [] });
@@ -245,7 +253,7 @@ describe("generateTocItemsFromMdast", () => {
       ### Subsection
     `;
 
-    const expected: TocItem[] = [
+    const expected: Omit<TocItem, "content">[] = [
       {
         value: "Section",
         href: "#section",
@@ -264,7 +272,7 @@ describe("generateTocItemsFromMdast", () => {
 
     const tree = fromMarkdown(source);
     const tocItems = generateTocItemsFromMdast(tree);
-    expect(tocItems).toEqual(expected);
+    expect(omitContent(tocItems)).toEqual(expected);
 
     const tocRef: TocItem[] = [];
     await process(source, { tocRef });
