@@ -233,4 +233,22 @@ describe("remark-flexible-toc", () => {
 
     expect(formatTocAsTable(toc)).toEqual(formatTocAsTable(toc2));
   });
+
+  // ******************************************
+  it("after a specific heading", async () => {
+    const source = "## Contents\n\n## A\n\n#### B\n\n### C\n\n### D";
+
+    const toc: TocItem[] = [];
+
+    await process(source, { tocRef: toc, after: "Contents" });
+
+    expect(formatTocAsTable(toc)).toMatchInlineSnapshot(`
+      [
+        " 2		1.1.    		root		A		#a ",
+        " 4		1.1.1.1.		root		B		#b ",
+        " 3		1.1.2.  		root		C		#c ",
+        " 3		1.1.3.  		root		D		#d ",
+      ]
+    `);
+  });
 });

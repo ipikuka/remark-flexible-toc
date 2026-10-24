@@ -106,6 +106,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 1,
         numbering: [1],
         parent: "root",
+        parentPath: [],
       },
       {
         value: "Level 2",
@@ -113,6 +114,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 2,
         numbering: [1, 1],
         parent: "root",
+        parentPath: [],
       },
       {
         value: "Level 3 Blockquote",
@@ -120,6 +122,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 3,
         numbering: [1, 1, 1],
         parent: "blockquote",
+        parentPath: [2],
       },
       {
         value: "Level 4 List Item",
@@ -127,6 +130,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 4,
         numbering: [1, 1, 1, 1],
         parent: "listItem",
+        parentPath: [3, 0],
       },
       {
         value: "Level 5 Footnote",
@@ -134,6 +138,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 5,
         numbering: [1, 1, 1, 1, 1],
         parent: "footnoteDefinition",
+        parentPath: [4],
       },
       {
         value: "Level 6 Container",
@@ -141,6 +146,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 6,
         numbering: [1, 1, 1, 1, 1, 1],
         parent: "container",
+        parentPath: [5],
       },
       {
         value: "Level 2 MDX",
@@ -148,7 +154,79 @@ describe("generateTocItemsFromMdast", () => {
         depth: 2,
         numbering: [1, 2],
         parent: "mdxJsxFlowElement",
+        parentPath: [6],
       },
+    ]);
+  });
+
+  // ******************************************
+  it("keeps structural parent paths from the original MDAST when items are filtered", () => {
+    const tree = {
+      type: "root",
+      children: [
+        {
+          type: "heading",
+          depth: 1,
+          children: [{ type: "text", value: "Article Title" }],
+        },
+        {
+          type: "container",
+          children: [
+            {
+              type: "heading",
+              depth: 3,
+              children: [{ type: "text", value: "Container A" }],
+            },
+            {
+              type: "blockquote",
+              children: [
+                {
+                  type: "heading",
+                  depth: 4,
+                  children: [{ type: "text", value: "Nested Quote" }],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "heading",
+          depth: 2,
+          children: [{ type: "text", value: "Excluded" }],
+        },
+        {
+          type: "container",
+          children: [
+            {
+              type: "heading",
+              depth: 3,
+              children: [{ type: "text", value: "Container B" }],
+            },
+          ],
+        },
+        {
+          type: "heading",
+          depth: 2,
+          children: [{ type: "text", value: "Kept" }],
+        },
+      ],
+    } as Root;
+
+    const tocItems = generateTocItemsFromMdast(tree, {
+      exclude: "Excluded",
+    });
+
+    expect(
+      tocItems.map(({ value, parent, parentPath }) => ({
+        value,
+        parent,
+        parentPath,
+      })),
+    ).toEqual([
+      { value: "Container A", parent: "container", parentPath: [1] },
+      { value: "Nested Quote", parent: "blockquote", parentPath: [1, 1] },
+      { value: "Container B", parent: "container", parentPath: [3] },
+      { value: "Kept", parent: "root", parentPath: [] },
     ]);
   });
 
@@ -182,6 +260,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 2,
         numbering: [1, 1],
         parent: "root",
+        parentPath: [],
       },
       {
         value: "Subsection",
@@ -189,6 +268,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 3,
         numbering: [1, 1, 1],
         parent: "root",
+        parentPath: [],
       },
     ]);
   });
@@ -211,6 +291,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 1,
         numbering: [1],
         parent: "root",
+        parentPath: [],
       },
       {
         value: "Level 2",
@@ -218,6 +299,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 2,
         numbering: [1, 1],
         parent: "root",
+        parentPath: [],
       },
       {
         value: "Level 3 Blockquote",
@@ -225,6 +307,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 3,
         numbering: [1, 1, 1],
         parent: "blockquote",
+        parentPath: [2],
       },
       {
         value: "Level 4 List Item",
@@ -232,6 +315,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 4,
         numbering: [1, 1, 1, 1],
         parent: "listItem",
+        parentPath: [3, 0],
       },
     ];
 
@@ -260,6 +344,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 2,
         numbering: [1, 1],
         parent: "root",
+        parentPath: [],
       },
       {
         value: "Subsection",
@@ -267,6 +352,7 @@ describe("generateTocItemsFromMdast", () => {
         depth: 3,
         numbering: [1, 1, 1],
         parent: "root",
+        parentPath: [],
       },
     ];
 

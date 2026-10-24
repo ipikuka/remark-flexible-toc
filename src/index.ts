@@ -23,6 +23,7 @@ export type TocItem = {
   depth: HeadingDepth;
   numbering: number[];
   parent: HeadingParent;
+  parentPath: number[];
   data?: {
     [PropertyName: string]: string | number | boolean | (string | number)[] | null | undefined;
   };
@@ -112,6 +113,27 @@ function addNumbering(arr: TocItem[]) {
   }
 }
 
+function createNodePathMap(tree: Root): WeakMap<object, number[]> {
+  const paths = new WeakMap<object, number[]>();
+
+  const visitNode = (node: unknown, path: number[]) => {
+    /* v8 ignore next -- @preserve */
+    if (!node || typeof node !== "object") return;
+
+    paths.set(node, path);
+
+    const children = (node as { children?: unknown }).children;
+    if (!Array.isArray(children)) return;
+
+    children.forEach((child, index) => {
+      visitNode(child, [...path, index]);
+    });
+  };
+
+  visitNode(tree, []);
+  return paths;
+}
+
 function copyTocContent(nodes: PhrasingContent[]): PhrasingContent[] {
   const results: PhrasingContent[] = [];
 
@@ -157,6 +179,7 @@ export function generateTocItemsFromMdast(
   const skipParentsFilter = settings.skipParents && convert(settings.skipParents);
 
   const slugger = new GithubSlugger();
+  const parentPaths = createNodePathMap(tree);
   const tocItems: TocItem[] = [];
   let afterHeadingDepth: HeadingDepth | undefined;
   let afterSectionEnded = !afterRegexFilter;
@@ -169,6 +192,8 @@ export function generateTocItemsFromMdast(
     const value = toString(_node, { includeImageAlt: false });
     let href = `#${settings.prefix ?? ""}${slugger.slug(value)}`;
     const parent = _parent.type;
+    /* v8 ignore next -- @preserve */
+    const parentPath = parentPaths.get(_parent) ?? [];
     const parentIncluded = !includeParentsFilter || includeParentsFilter(_parent);
     const parentSkipped = !!skipParentsFilter && skipParentsFilter(_parent);
     const parentAllowed = parentIncluded && !parentSkipped;
@@ -218,6 +243,7 @@ export function generateTocItemsFromMdast(
       depth,
       numbering: [],
       parent,
+      parentPath,
       ...(data && { data }),
     });
 

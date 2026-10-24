@@ -123,6 +123,7 @@ Now, running both `node example.js` you will see that the same table of contents
     href: "#section",
     numbering: [1, 1],
     parent: "root",
+    parentPath: [],
     value: "Section",
   },
   {
@@ -131,6 +132,7 @@ Now, running both `node example.js` you will see that the same table of contents
     href: "#subheading-1",
     numbering: [1, 1, 1],
     parent: "root",
+    parentPath: [],
     value: "Subheading 1",
   },
   {
@@ -139,6 +141,7 @@ Now, running both `node example.js` you will see that the same table of contents
     href: "#subheading-2",
     numbering: [1, 1, 2],
     parent: "root",
+    parentPath: [],
     value: "Subheading 2",
   },
 ]
@@ -370,11 +373,16 @@ type TocItem = {
   depth: HeadingDepth; // 1 | 2 | 3 | 4 | 5 | 6
   numbering: number[]; // explained below
   parent: HeadingParent; // "root"| "blockquote" | "footnoteDefinition" | "listItem" | "container" | "mdxJsxFlowElement"
+  parentPath: number[]; // child-index path from the MDAST root to the heading's immediate parent
   data?: Record<string, unknown>; // Other remark plugins may store custom data in "node.data.hProperties" like "id" etc.
 };
 ```
 
 The `content` keeps the rich MDAST phrasing content of the heading. Links and link references are unwrapped to prevent nested links, footnote references are omitted, and position information is removed. The content is cloned, so mutating it does not mutate the heading in the MDAST tree.
+
+The `parentPath` identifies the heading's exact structural parent in the input MDAST tree by child indexes. A heading whose immediate parent is the root has `parentPath: []`. For example, if a heading is inside the second root child and that child is its immediate parent, the path is `[1]`; if its immediate parent is the first child of that node, the path is `[1, 0]`. The path is computed from the input MDAST structure before TOC filtering, so options such as `skipLevels`, `exclude`, `maxDepth`, and `after` do not renumber or rebase it.
+
+Regional or section-specific tables of contents can be implemented using `parentPath`.
 
 > [!NOTE]
 > If there is a remark plugin before **`remark-flexible-toc`** in the plugin chain like **`remark-heading-id`** or **`remark-custom-header-id`**, which provides custom id for headings, that custom id takes precedence for `href`.
@@ -404,6 +412,7 @@ The `github-slugger` produces unique links with using a counter mechanism intern
     href: "#section",
     numbering: [1, 1],
     parent: "root",
+    parentPath: [],
     value: "Section",
   },
   {
@@ -411,6 +420,7 @@ The `github-slugger` produces unique links with using a counter mechanism intern
     href: "#subheading",
     numbering: [1, 1, 1],
     parent: "root",
+    parentPath: [],
     value: "Subheading",
   },
   {
@@ -418,6 +428,7 @@ The `github-slugger` produces unique links with using a counter mechanism intern
     href: "#section-1",
     numbering: [1, 2],
     parent: "root",
+    parentPath: [],
     value: "Section",
   },
   {
@@ -425,6 +436,7 @@ The `github-slugger` produces unique links with using a counter mechanism intern
     href: "#subheading-1",
     numbering: [1, 2, 1],
     parent: "root",
+    parentPath: [],
     value: "Subheading",
   },
 ]
