@@ -125,7 +125,7 @@ function createNodePathMap(tree: Root): WeakMap<object, number[]> {
     const children = (node as { children?: unknown }).children;
     if (!Array.isArray(children)) return;
 
-    children.forEach((child, index) => {
+    (children as unknown[]).forEach((child, index) => {
       visitNode(child, [...path, index]);
     });
   };
